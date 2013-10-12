@@ -122,7 +122,7 @@ class RRTest < Test::Unit::TestCase
   end
 
   def test_range
-    assert_raises(ArgumentError) do
+    assert_raises(*EXPECTED_EXCEPTION_CLASSES) do
       Net::DNS::RR.new("google.com. 10800 IM A")
     end
   end

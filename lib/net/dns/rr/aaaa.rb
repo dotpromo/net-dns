@@ -42,59 +42,59 @@ module Net
 
         private
 
-          def subclass_new_from_hash(options)
-            if options.has_key?(:address)
-              @address = check_address(options[:address])
-            else
-              raise ArgumentError, ":address field is mandatory"
-            end
+        def subclass_new_from_hash(options)
+          if options.has_key?(:address)
+            @address = check_address(options[:address])
+          else
+            raise ArgumentError, ":address field is mandatory"
+          end
+        end
+
+        def subclass_new_from_string(str)
+          @address = check_address(str)
+        end
+
+        def subclass_new_from_binary(data, offset)
+          tokens   = data.unpack("@#{offset} n8")
+          @address = IPAddr.new(sprintf("%x:%x:%x:%x:%x:%x:%x:%x", *tokens))
+          offset + 16
+        end
+
+
+        def set_type
+          @type = Net::DNS::RR::Types.new("AAAA")
+        end
+
+        def get_inspect
+          value
+        end
+
+
+        def check_address(input)
+          address = case input
+                    when IPAddr
+                      input
+                    when String
+                      IPAddr.new(input)
+                    else
+                      raise ArgumentError, "Invalid IP address `#{input}'"
+                    end
+
+          if !address.ipv6?
+            raise(ArgumentError, "Must specify an IPv6 address")
           end
 
-          def subclass_new_from_string(str)
-            @address = check_address(str)
-          end
+          address
+        end
 
-          def subclass_new_from_binary(data, offset)
-            tokens = data.unpack("@#{offset} n8")
-            @address = IPAddr.new(sprintf("%x:%x:%x:%x:%x:%x:%x:%x", *tokens))
-            offset + 16
-          end
+        def build_pack
+          @address_pack = @address.hton
+          @rdlength     = @address_pack.size
+        end
 
-
-          def set_type
-            @type = Net::DNS::RR::Types.new("AAAA")
-          end
-
-          def get_inspect
-            value
-          end
-
-
-          def check_address(input)
-            address = case input
-              when IPAddr
-                input
-              when String
-                IPAddr.new(input)
-              else
-                raise ArgumentError, "Invalid IP address `#{input}'"
-            end
-
-            if !address.ipv6?
-              raise(ArgumentError, "Must specify an IPv6 address")
-            end
-
-            address
-          end
-
-          def build_pack
-            @address_pack = @address.hton
-            @rdlength = @address_pack.size
-          end
-
-          def get_data
-            @address_pack
-          end
+        def get_data
+          @address_pack
+        end
 
       end
 

@@ -699,7 +699,7 @@ module Net
       def new_from_hash(hash)
         new_from_scratch
         hash.each do |key,val|
-          eval "self.#{key.to_s} = val"
+          self.__send__("#{key}=", val)
         end
       end
 

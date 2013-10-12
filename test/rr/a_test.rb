@@ -64,7 +64,7 @@ class RRATest < Test::Unit::TestCase
 
   InvalidArguments.each_with_index do |arguments, index|
     define_method "test_initialize_should_raise_with_invalid_arguments_#{index}" do
-      assert_raises(ArgumentError) { Net::DNS::RR::A.new(arguments) }
+      assert_raises(*EXPECTED_EXCEPTION_CLASSES) { Net::DNS::RR::A.new(arguments) }
     end
   end
 

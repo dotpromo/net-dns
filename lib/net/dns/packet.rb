@@ -119,7 +119,7 @@ module Net
 
       # Checks if the packet is a QUERY packet
       def query?
-        @header.opCode == Net::DNS::Header::QUERY
+        @header.query?
       end
 
       # Returns the packet object in binary data, suitable
@@ -508,6 +508,7 @@ module Net
               rrobj,offset = Net::DNS::RR.parse_packet(data,offset)
               @answer << rrobj
               @logger.debug rrobj.inspect
+              pp rrobj.inspect
             rescue NameError => e
               warn "Net::DNS unsupported record type: #{e.message}"
             end
