@@ -508,7 +508,6 @@ module Net
               rrobj,offset = Net::DNS::RR.parse_packet(data,offset)
               @answer << rrobj
               @logger.debug rrobj.inspect
-              pp rrobj.inspect
             rescue NameError => e
               warn "Net::DNS unsupported record type: #{e.message}"
             end
