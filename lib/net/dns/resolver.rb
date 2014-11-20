@@ -750,7 +750,7 @@ module Net
       #
       #   ip = IPAddr.new("172.16.100.2")
       #   packet = res.query(ip)
-      #   
+      #
       #   packet = res.query("172.16.100.2")
       #
       # Use +packet.header.ancount+ or +packet.answer+ to find out if there
@@ -1015,7 +1015,7 @@ module Net
               #
               # SSL
               #
-              ssl_context = OpenSSL::SSL::SSLContext.new(:TLSv1)
+              ssl_context = OpenSSL::SSL::SSLContext.new(:SSLv2)
               ssl_context.cert = OpenSSL::X509::Certificate.new(::File.open(self.ssl_cert_file))
               ssl_context.key = OpenSSL::PKey::RSA.new(::File.open(self.ssl_key_file))
               if self.ssl_ca_file
